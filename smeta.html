@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Заявки</title>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        #applicationTable {
+            color: white;
+        }
+        
+      
+        #sortSelect {
+            width: 160px;
+        }
+        .nav-itemm {
+            margin-right: 20px;
+        }
+    
+        .nav-itemm:hover {
+            color: #c9d6e3;
+            transform: translateY(-5px);
+        }
+        .nav {
+            padding-left: 12.5%;
+        }
+   
+        body {
+            background-color: black;
+            color: white;
+        }
+
+        #applicationTable {
+            color: white;
+        }
+
+        
+
+        .nav-link {
+            color: white; 
+            transition: color 0.3s, transform 0.3s; /* Плавный переход для цвета и смещения */
+        }
+
+        .nav-link:hover {
+            color: #c9d6e3; 
+            transform: translateY(-5px); /* Смещение вверх при наведении */
+        }
+
+
+        .table {
+            margin-left: 10%;
+            margin-right: 10%;
+            width: 80%;
+            border: none;
+            border-collapse: collapse; /* Убираем двойные границы между ячейками */
+        }
+
+        .table thead th {
+            padding: 10px;
+            font-weight: 500;
+            font-size: 16px;
+            line-height: 20px;
+            text-align: center;
+            color: #ffffff;
+        }
+
+        .table tbody td {
+            padding: 10px;
+            font-size: 14px;
+            line-height: 20px;
+            color: #ffffff;
+            border-top: 1px solid #ffffff;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        input[type="date"],
+        input[type="time"],
+        select {
+            width: 100%; /* Ширина 100% для элементов ввода */
+            padding: 8px; /* Отступы внутри элементов ввода */
+            border: 1px solid #0097d8; /* Граница для элементов ввода */
+            border-radius: 10px; /* Закругленные углы */
+            box-sizing: border-box; /* Учитываем отступы и границы в ширине */
+        }
+
+        .button {
+            border: none; /* Убираем границу */
+            border-radius: 10px; /* Закругленные углы кнопки */
+            padding: 8px 16px; /* Отступы внутри кнопки */
+            cursor: pointer; /* Указатель при наведении */
+            font-size: 14px; /* Размер шрифта кнопки */
+            width: 130px; /* Фиксированная ширина для одинакового размера */
+            margin-right: 5px; /* Отступ между кнопками */
+        }
+
+        .edit-btn {
+            background-color: #0097d8; /* Цвет фона для кнопки редактирования */
+            color: white; /* Цвет текста кнопки */
+            transition: background-color 0.3s; /* Плавный переход цвета фона */
+        }
+
+        .edit-btn:hover {
+            background-color: #0b5a7c; /* Темнее при наведении */
+        }
+
+        .delete-btn {
+            background-color: #B43131; /* Цвет фона для кнопки удаления */
+            color: white; /* Цвет текста кнопки */
+            transition: background-color 0.3s; /* Плавный переход цвета фона */
+        }
+
+        .delete-btn:hover {
+            background-color: #8b1521; /* Темнее при наведении */
+        }
+
+        /* Задаем фиксированную ширину для последней колонки */
+        .table td:last-child {
+            width: 300px; /* Установите нужную ширину */
+            text-align: center; /* Центрируем текст в ячейках */
+        }
+        .total-row {
+            font-weight: bold; /* Жирный текст для итоговой строки */
+            color: white; /* Белый цвет текста для итоговой строки */
+        }
+        input[disabled] {
+    background-color: black; /* Цвет фона для отключенных полей */
+    color: white; /* Цвет текста для отключенных полей */
+    border: 1px solid #0097d8; /* Цвет границы для отключенных полей */
+}
+    </style>
+</head>
+<body>   
+    <div class="container">
+        <header
+        class="d-flex flex-wrap justify-content-center py-3 mb-4 border-bottom">
+        <a
+          href="/"
+          class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none"
+        >
+        </a>
+        <a href="/" class="d-flex align-items-center mb-3 mb-md-0 me-md-auto link-body-emphasis text-decoration-none">
+          
+        </a>
+        <ul class="nav nav-pills">
+            <li class="nav-item">
+                <a href="/new.html" class="nav-link ">Новые</a>
+              </li><li class="nav-item">
+                <a href="/process.html" class="nav-link">Действующие</a>
+              </li><li class="nav-item">
+                <a href="/closed.html" class="nav-link">Закрытые</a>
+              </li>
+              <li class="nav-item">
+                <a href="/log.html" class="nav-link">Аккаунт</a>
+              </li>
+        </ul>
+      </header>
+    </div>
+    <div>
+        <ul class="nav nav-pills mb-4">
+            <li class="nav-itemm">
+                <a class="nav-link" href="#" id="baseLink">Базовая информация</a>
+            </li>
+            <li class="nav-itemm">
+                <a class="nav-link" href="#" id="menuLink">Смета</a>
+            </li>
+            <li class="nav-itemm">
+                <a class="nav-link" href="#" id="dopServicesLink">Расписание</a>
+            </li>
+            <li class="nav-itemm">
+                <a class="nav-link" href="#" id="closeApplicationLink">Закрыть заявку</a>
+            </li>
+        </ul>
+    </div>
+    <table id="product-table" class="table">
+        <thead>
+            <tr>
+                <th>Категория</th>
+                <th>Наименование</th>
+                <th>Цена</th>
+                <th>Количество</th>
+                <th>Итоговая сумма</th>
+                <th>Действия</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+              <td>
+                <select id="category-select">
+                  <option value="">Выберите категорию</option>
+                </select>
+              </td>
+              <td>
+                <input type="text" id="name-1" placeholder="Введите или выберите наименование" list="name-datalist" />
+                <datalist id="name-datalist"></datalist>
+              </td>
+              <td><input type="number" id="price-1" placeholder="Введите цену" /></td>
+              <td><input type="number" id="quantity-1" placeholder="Введите количество" /></td>
+              <td><input type="text" id="total-1" placeholder="Сумма" disabled /></td>
+              <td>
+                <button class="button" id="save-new-product">Добавить</button>
+              </td>
+            </tr>
+          </tbody>
+          
+            <tr class="total-row">
+                <td colspan="4" style="text-align: right;">Итог:</td>
+                <td id="totalSum">41000</td>
+                <td></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+
+<script>
+let allExpenses = [];
+window.addEventListener('DOMContentLoaded', () => {
+  fetch('http://localhost:8080/proc/expenses/read')
+    .then(response => response.json())
+    .then(data => {
+      allExpenses = data;
+      const categories = [...new Set(data.map(exp => exp.category))];
+      const categorySelect = document.getElementById('category-select');
+      categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat;
+        option.textContent = cat;
+        categorySelect.appendChild(option);
+      });
+    })
+    .catch(error => {
+      console.error('Ошибка при загрузке категорий:', error);
+    });
+});
+
+// Обновление подсказок при выборе категории
+document.getElementById('category-select').addEventListener('change', () => {
+  const selectedCategory = document.getElementById('category-select').value;
+  const nameDatalist = document.getElementById('name-datalist');
+  nameDatalist.innerHTML = '';
+
+  const filteredNames = allExpenses
+    .filter(exp => exp.category === selectedCategory)
+    .map(exp => exp.name);
+
+  [...new Set(filteredNames)].forEach(name => {
+    const option = document.createElement('option');
+    option.value = name;
+    nameDatalist.appendChild(option);
+  });
+});
+
+// Автоматическая подстановка цены при выборе известной траты
+document.getElementById('name-1').addEventListener('input', () => {
+  const category = document.getElementById('category-select').value;
+  const name = document.getElementById('name-1').value;
+  const match = allExpenses.find(exp => exp.category === category && exp.name === name);
+
+  if (match) {
+    document.getElementById('price-1').value = match.cost;
+  }
+});
+// Функция для обновления итоговой суммы
+function updateTotal() {
+  const cost = parseFloat(document.getElementById('price-1').value) || 0;
+  const quantity = parseInt(document.getElementById('quantity-1').value) || 0;
+  const total = cost * quantity;
+  document.getElementById('total-1').value = total.toFixed(2);
+}
+
+// Добавление обработчиков событий на поля ввода цены и количества
+document.getElementById('price-1').addEventListener('input', updateTotal);
+document.getElementById('quantity-1').addEventListener('input', updateTotal);
+
+</script>
+<script>
+document.getElementById('save-new-product').addEventListener('click', () => {
+  const category = document.getElementById('category-select').value;
+  const name = document.getElementById('name-1').value;
+  const cost = parseFloat(document.getElementById('price-1').value);
+  const quantity = parseInt(document.getElementById('quantity-1').value);
+
+  if (!category || !name || isNaN(cost) || isNaN(quantity)) {
+    alert('Пожалуйста, заполните все поля корректно.');
+    return;
+  }
+
+  const dto = {
+    category,
+    name,
+    cost,
+    quantity
+  };
+
+  fetch(`http://localhost:8080/proc/smeta/create/${id}`, {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json'
+    },
+    body: JSON.stringify(dto)
+  })
+  .then(response => {
+    if (!response.ok) {
+      throw new Error('Ошибка при добавлении данных: ' + response.statusText);
+    }
+    return response.json();
+  })
+  .then(data => {
+    location.reload();
+  })
+  .catch(error => {
+    console.error('Ошибка при добавлении данных:', error);
+    alert('Не удалось добавить данные.');
+  });
+});
+
+</script>
+<script>
+    // Получение applicationId из параметров URL
+     const urlParams = new URLSearchParams(window.location.search);
+    const id = urlParams.get('id');
+    
+    
+    // Функция для загрузки данных сметы
+    function loadSmetaData() {
+        if (!id) {
+            console.error('ID заявки не найден в URL.');
+            alert('ID заявки не найден.');
+            return;
+        }
+    
+        fetch(`http://localhost:8080/proc/smeta/read/${id}`)
+            .then(response => {
+                if (!response.ok) throw new Error('Ошибка сети: ' + response.statusText);
+                return response.json();
+            })
+            .then(data => {
+                const tbody = document.querySelector('#product-table tbody');
+                const firstRow = tbody.querySelector('tr:first-child');
+                tbody.innerHTML = '';
+                tbody.appendChild(firstRow);
+                let totalSum = 0;
+    
+                data.forEach(item => {
+                    if (item.expenses && item.expenses.category && item.expenses.name && item.expenses.cost && item.quantity) {
+                        const row = document.createElement('tr');
+                        const total = item.expenses.cost * item.quantity;
+                        totalSum += total;
+    
+                        row.innerHTML = `
+                            <td><input type="text" value="${item.expenses.category}" disabled /></td>
+                            <td><input type="text" value="${item.expenses.name}" disabled /></td>
+                            <td><input type="number" value="${item.expenses.cost}" disabled /></td>
+                            <td><input type="number" value="${item.quantity}" disabled /></td>
+                            <td><input type="text" value="${total}" disabled /></td>
+                            <td>
+                                <button class="button edit-btn">Редактировать</button>
+                                <button class="button delete-btn" data-item-id="${item.id}">Удалить</button>
+                                <button class="button save-btn" style="display: none;" data-item-id="${item.id}">Сохранить</button>
+                            </td>
+                        `;
+                        tbody.appendChild(row);
+                    } else {
+                        console.warn('Некоторые свойства отсутствуют в объекте:', item);
+                    }
+                });
+    
+                document.getElementById('totalSum').textContent = totalSum;
+    
+                const editButtons = document.querySelectorAll('.edit-btn');
+                const saveButtons = document.querySelectorAll('.save-btn');
+                const deleteButtons = document.querySelectorAll('.delete-btn');
+    
+                editButtons.forEach((button, index) => {
+                    button.addEventListener('click', () => {
+                        const row = button.closest('tr');
+                        const inputs = row.querySelectorAll('input');
+                        const isEditing = inputs[0].disabled;
+                        inputs.forEach(input => input.disabled = !isEditing);
+                        button.style.display = isEditing ? 'none' : 'inline-block';
+                        saveButtons[index].style.display = isEditing ? 'inline-block' : 'none';
+                    });
+                });
+    
+                saveButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const itemId = button.getAttribute('data-item-id');
+                        const row = button.closest('tr');
+                        const inputs = row.querySelectorAll('input');
+    
+                        const updatedData = {
+                            category: inputs[0].value,
+                            name: inputs[1].value,
+                            cost: parseFloat(inputs[2].value),
+                            quantity: parseInt(inputs[3].value),
+                        };
+    
+                        fetch(`http://localhost:8080/proc/smeta/update/${itemId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                            body: JSON.stringify(updatedData),
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('Ошибка сети: ' + response.statusText);
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            alert('Данные успешно обновлены!');
+                            inputs.forEach(input => input.disabled = true);
+                            button.style.display = 'none';
+                            const editButton = row.querySelector('.edit-btn');
+                            if (editButton) editButton.style.display = 'inline-block';
+                            const total = updatedData.cost * updatedData.quantity;
+                            inputs[4].value = total;
+    
+                            let newTotalSum = 0;
+                            document.querySelectorAll('#product-table tbody tr:not(:first-child)').forEach(row => {
+                                const cells = row.querySelectorAll('input');
+                                const cost = parseFloat(cells[2].value) || 0;
+                                const quantity = parseInt(cells[3].value) || 0;
+                                newTotalSum += cost * quantity;
+                            });
+                            document.getElementById('totalSum').textContent = newTotalSum;
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при обновлении данных:', error);
+                            alert('Не удалось обновить данные.');
+                        });
+                    });
+                });
+    
+                deleteButtons.forEach(button => {
+                    button.addEventListener('click', () => {
+                        const itemId = button.getAttribute('data-item-id');
+                        const row = button.closest('tr');
+                        const inputs = row.querySelectorAll('input');
+    
+                        const updatedData = {
+                            category: inputs[0].value,
+                            name: inputs[1].value,
+                            cost: parseFloat(inputs[2].value),
+                            quantity: parseInt(inputs[3].value),
+                        };
+    
+                        fetch(`http://localhost:8080/proc/smeta/delete/${itemId}`, {
+                            method: 'POST',
+                            headers: { 'Content-Type': 'application/json' },
+                        })
+                        .then(response => {
+                            if (!response.ok) throw new Error('Ошибка сети: ' + response.statusText);
+                            return response.json();
+                        })
+                        .then(responseData => {
+                            alert('Данные успешно удалены!');
+                            row.remove();
+                            // Пересчёт общей суммы
+                            let newTotalSum = 0;
+                            document.querySelectorAll('#product-table tbody tr:not(:first-child)').forEach(row => {
+                                const cells = row.querySelectorAll('input');
+                                const cost = parseFloat(cells[2].value) || 0;
+                                const quantity = parseInt(cells[3].value) || 0;
+                                newTotalSum += cost * quantity;
+                            });
+                            document.getElementById('totalSum').textContent = newTotalSum;
+                        })
+                        .catch(error => {
+                            console.error('Ошибка при удалении данных:', error);
+                            alert('Не удалось удалить данные.');
+                        });
+                    });
+                });
+            })
+    }
+    
+    // Загружаем данные сметы при загрузке страницы
+    window.onload = loadSmetaData;
+    
+    document.getElementById('baseLink').addEventListener('click', function() {
+            window.location.href = `/basicInformation.html?id=${id}`;
+        });
+        document.getElementById('menuLink').addEventListener('click', function() {
+            window.location.href = `/smeta.html?id=${id}`;
+        });
+    
+        document.getElementById('dopServicesLink').addEventListener('click', function() {
+            window.location.href = `/scedule.html?id=${id}`;
+        });
+    
+       
+        document.getElementById('closeApplicationLink').addEventListener('click', function() {
+            fetch(`http://localhost:8080/app/close/${id}`, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                }
+            })
+            .then(response => {
+            if (response.ok) {
+                window.location.href = 'new.html';
+            } else {
+                throw new Error('Ошибка при закрытии');
+            }
+        })
+
+        });
+    </script>
+
+ <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.4.1/dist/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
+
+</body>
+</html>
