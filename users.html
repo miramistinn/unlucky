@@ -109,7 +109,7 @@
             <a href="/reports.html" class="nav-link">Отчеты</a>
           </li>
           <li class="nav-item">
-            <a href="login.html" class="nav-link">Аккаунт</a>
+            <a href="logoutman.html" class="nav-link">Аккаунт</a>
           </li>
         </ul>
       </header>
@@ -189,7 +189,7 @@
             row.appendChild(phoneCell);
     
             const activeCell = document.createElement('td');
-            activeCell.textContent = user.active ? 'Да' : 'Нет';
+            activeCell.textContent = user.active ? 'Акивен' : 'Заблокирован';
             row.appendChild(activeCell);
     
             const banCell = document.createElement('td');
@@ -279,24 +279,22 @@
         }
     
         function banClient(email) {
-            fetch(`http://localhost:8080/users/client/ban`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json'
-                },
-                body: JSON.stringify(email)
-            })
-                .then(response => {
-                    if (response.ok) {
-                        console.log("Пользователь заблокирован");
-                        fetchData(currentUserType); // Перезагрузить
-                    } else {
-                        console.error('Ошибка при выполнении POST-запроса');
-                    }
-                })
-                .catch(error => console.error('Ошибка при выполнении POST-запроса:', error));
+    fetch(`http://localhost:8080/users/ban/${encodeURIComponent(email)}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json'
         }
-    
+    })
+    .then(response => {
+        if (response.ok) {
+            console.log("Пользователь заблокирован");
+            fetchData(currentUserType); // Перезагрузить
+        } else {
+            console.error('Ошибка при выполнении POST-запроса');
+        }
+    })
+    .catch(error => console.error('Ошибка при выполнении POST-запроса:', error));
+}
         // Навешиваем обработчики на dropdown пункты
         document.addEventListener('DOMContentLoaded', function () {
             document.querySelectorAll('.user-type-option').forEach(item => {

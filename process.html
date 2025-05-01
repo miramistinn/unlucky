@@ -69,8 +69,8 @@
                 <a href="/closed.html" class="nav-link">Закрытые</a>
               </li>
               <li class="nav-item">
-                <a href="/login.html" class="nav-link">Аккаунт</a>
-              </li>
+                <a href="/logoutorg.html" class="nav-link">Аккаунт</a>
+            </li>
         </ul>
       </header>
     </div>
@@ -144,39 +144,23 @@
         });
     }
 
-    // Функция для сортировки заявок
-    function sortApplications() {
-        const sortValue = document.getElementById('sortSelect').value;
-        const sortedApplications = [...applications]; // Создаем копию массива
+   // Функция для сортировки и отображения заявок
+function sortApplications() {
+    const sortValue = document.getElementById('sortSelect').value;
+    const sortedApplications = applications.slice().sort((a, b) => {
+        const dateA = new Date(a.dateOfCreated);
+        const dateB = new Date(b.dateOfCreated);
 
-        if (sortValue === 'newest') {
-            sortedApplications.sort((a, b) => new Date(b.dateOfCreated) - new Date(a.dateOfCreated));
-        } else if (sortValue === 'oldest') {
-            sortedApplications.sort((a, b) => new Date(a.dateOfCreated) - new Date(b.dateOfCreated));
-        }
+        return sortValue === 'oldest' ? dateA - dateB : dateB - dateA;
+    });
 
-        renderApplications(sortedApplications); // Отображаем отсортированные заявки
-    }
+    renderApplications(sortedApplications);
+}
 
-    // Обработчик события для сортировки
-    document.getElementById('sortSelect').addEventListener('change', sortApplications);
+// Обработчик события для выпадающего списка сортировки
+document.getElementById('sortSelect').addEventListener('change', sortApplications);
+
  
-        // Функция для сортировки заявок
-        function sortApplications(order) {
-            const sortedApplications = applications.slice().sort((a, b) => {
-                const dateA = new Date(a.dateOfCreated);
-                const dateB = new Date(b.dateOfCreated);
-                
-                return order === 'oldest' ? dateA - dateB : dateB - dateA;
-            });
-            populateTable(sortedApplications);
-        }
-
-        // Обработчик события для выпадающего списка сортировки
-        document.getElementById('sortSelect').addEventListener('change', function() {
-            const selectedValue = this.value;
-            sortApplications(selectedValue);
-        });
 
 
         function startProcessing(id) {

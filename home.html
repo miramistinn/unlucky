@@ -30,7 +30,9 @@
                     <li class="nav-item"><a href="home.html" class="nav-link active" aria-current="page">Главная</a></li>
                     <li class="nav-item"><a href="contacs.html" class="nav-link">Контакты</a></li>
                     <li class="nav-item"><a href="about.html" class="nav-link ">О нас</a></li>
-                    <li class="nav-item"><a href="account.html" Регистрация class="nav-link">Аккаунт</a></li>
+                    <li class="nav-item">
+                        <a href="#" class="nav-link" onclick="checkAuth(event)">Аккаунт</a>
+                    </li>                
                 </ul>
             </header>
         </div>
@@ -79,8 +81,7 @@
                         </div>
                     </div>
                 </div>
-                <a href="#" onclick="check(event)" style="margin-top: 40pt;margin-bottom: 40pt;margin-left: 500pt;" class="btn">Оставить заявку</a>
-            </section>
+                <a href="#" onclick="check(event)" style="margin-top: 40pt; margin-bottom: 40pt; margin-left: 500pt;" class="btn">Оставить заявку</a>            </section>
     
             <section class="advantages">
                 <h2>Преимущества нашей компании</h2>
@@ -107,30 +108,57 @@
         <footer>
             <p>&copy; 2024 Компания по организации мероприятий. Все права защищены.</p>
         </footer>
-        <script>
-            function check(event) {
-              event.preventDefault(); // Предотвращаем переход по ссылке по умолчанию
-          
-              fetch('http://localhost:9090/log/check', {
-                method: "post",
-                headers: {
-                  'Content-Type': 'application/json'
-                },
-              })
-              .then(result => {
-                // Обработка ответа от сервера после успешной отправки данных
-                console.log(result);
-                if (result === "no") {
-                  window.location.href = "log.html"; // Перенаправление на страницу log.html
-                } else {
-                  window.location.href = "addApllicatoin.html"; // Перенаправление на страницу add.html
-                }
-              })
-              .catch(error => {
-                // Обработка ошибки при отправке запроса
-                console.error('Error:', error);
-              });
-            }
-          </script>
+           
     </body>
+    <script>
+        function check(event) {
+            event.preventDefault(); // Предотвращаем переход по ссылке
+        
+            fetch('http://localhost:8080/log/users/isauth', {
+                method: 'POST'
+            })
+            .then(response => {
+                console.log('Response status:', response.status);
+                if (response.status === 204) {
+                    window.location.href = '/login.html';
+                } else if (response.status === 200) {
+                    // Файл не пустой
+                    window.location.href = '/addApllicatoin.html';
+                } else {
+                    // Другие ошибки
+                    throw new Error('Неизвестный ответ сервера');
+                }
+            })
+            .catch(error => {
+                console.error('Ошибка:', error);
+                alert('Произошла ошибка при запросе.');
+            });
+        }
+        </script>
+        <script>
+            function checkAuth(event) {
+                event.preventDefault(); // Предотвращаем переход по ссылке
+        
+                fetch('http://localhost:8080/log/users/isauth', {
+                    method: 'POST'
+                })
+                .then(response => {
+                    console.log('Response status:', response.status);
+                    if (response.status === 204) {
+                        // Пользователь не авторизован
+                        window.location.href = '/login.html';
+                    } else if (response.status === 200) {
+                        // Пользователь авторизован
+                        window.location.href = '/accaunt.html';
+                    } else {
+                        // Другие ошибки
+                        throw new Error('Неизвестный ответ сервера');
+                    }
+                })
+                .catch(error => {
+                    console.error('Ошибка:', error);
+                    alert('Произошла ошибка при запросе.');
+                });
+            }
+        </script>
 </html>

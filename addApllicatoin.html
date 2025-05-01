@@ -29,7 +29,7 @@
         } */
         .form-control {
             background-color: #ede4e4;
-            color: #bbb;
+            color: #292626;
             height: 70px; 
             border-radius: 15px; /* Скругление полей */
             font-size: 18px; /* Увеличение шрифта */
@@ -115,34 +115,14 @@
                 <li class="nav-item"><a href="home.html" class="nav-link" aria-current="page">Главная</a></li>
                 <li class="nav-item"><a href="contacs.html" class="nav-link">Контакты</a></li>
                 <li class="nav-item"><a href="about.html" class="nav-link ">О нас</a></li>
-                <li class="nav-item"><a href="account.html" Регистрация class="nav-link">Аккаунт</a></li>
+                <li class="nav-item"><a href="accaunt.html" Регистрация class="nav-link">Аккаунт</a></li>
             </ul>
         </header>
     </div>
-   <!-- <div class="containerr">
-    <div class="center">
-        <h1 style="margin-bottom: 10px; margin-left: 105px;">Свяжитесь с нами</h1>
-    </div>
-    <form id="applicationForm">
-        <div class="form-group">
-            <label for="name">ИМЯ</label>
-            <input type="text" class="form-control" id="name" name="name" autocomplete="name" required>
-        </div>
-        <div class="form-group">
-            <label for="phone">НОМЕР ТЕЛЕФОНА</label>
-            <input type="tel" class="form-control" id="phone" name="phone"autocomplete="phone" required>
-        </div>
-        <div class="form-group">
-            <label for="comments">КОММЕНТАРИЙ</label>
-            <textarea id="comments" class="form-control" name="comments"autocomplete="comments" required></textarea>
-        </div>
-        <button type="submit" class="btn btn-primary">Отправить</button>
-    </form>
-</div> -->
 <div class="reg">
     <h2 class="text-center">Оставить заявку, и с вами в близжайшее время свяжется наш менеджер</h2>
     <div style="margin-bottom: 30px;"></div>
-    <form id="registrationForm">
+    <form id="applicationForm">
         <div class="mb-3">
             <input type="text" class="form-control" id="name" placeholder="Введите ФИО" required readonly>
         </div>
@@ -170,13 +150,15 @@
             var name = document.getElementById('name').value;
             var phone = document.getElementById('phone').value;
             var comments = document.getElementById('comments').value;
+            var email = document.getElementById('email').value;
     
             // Создаем объект с данными для отправки на сервер
             var data = {
                 name: name,
                 phone: phone,
+                email:email,
                 comments: comments,
-                source: "сайт"
+                source: 'сайт'
             };
     
             // Отправляем POST-запрос на сервер
@@ -189,7 +171,7 @@
             })
             .then(response => {
             if (response.ok) {
-                window.location.href = 'users.html';
+                window.location.href = 'home.html';
             } else {
                 throw new Error('Ошибка при отправке формы');
             }
@@ -205,6 +187,27 @@
         var form = document.getElementById('applicationForm');
         // Назначаем обработчик события отправки формы
         form.addEventListener('submit', submitForm);
+    </script>
+    <script>
+        function fetchUserData() {
+            fetch('http://localhost:8080/log/users/read')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Не удалось загрузить данные пользователя');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    // Заполнение формы полученными данными
+                    document.getElementById('email').value = data.email || '';
+                    document.getElementById('name').value = data.name || ''; 
+                    document.getElementById('phone').value = data.phone || '';
+                })
+                .catch(error => {
+                    console.error('Ошибка загрузки данных пользователя:', error);
+                });
+        }
+        window.addEventListener('DOMContentLoaded', fetchUserData);
     </script>
 </body>
 </html>

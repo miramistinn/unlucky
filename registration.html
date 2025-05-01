@@ -72,7 +72,9 @@
                 <li class="nav-item"><a href="home.html" class="nav-link" aria-current="page">Главная</a></li>
                 <li class="nav-item"><a href="contacs.html" class="nav-link">Контакты</a></li>
                 <li class="nav-item"><a href="about.html" class="nav-link ">О нас</a></li>
-                <li class="nav-item"><a href="account.html" Регистрация class="nav-link active">Аккаунт</a></li>
+                <li class="nav-item">
+                    <a href="#" class="nav-link active" onclick="checkAuth(event)">Аккаунт</a>
+                </li>  
             </ul>
         </header>
     </div>
@@ -85,7 +87,7 @@
         </div>
         
         <div class="mb-3">
-            <input type="text" class="form-control" id="email" placeholder="Введите ФИО" required>
+            <input type="text" class="form-control" id="name" placeholder="Введите ФИО" required>
         </div>
         <div class="mb-3">
             <input type="tel" class="form-control" id="phone" placeholder="Введите номер телефона" required>
@@ -114,26 +116,24 @@
         // Получаем значения полей формы
         var email = document.getElementById('email').value;
         var password = document.getElementById('password').value;
-        var repassword = document.getElementById('repassword').value;
-
+        var phone = document.getElementById('phone').value;
+        var name = document.getElementById('name').value;
         // Скрываем все сообщения об ошибках
         document.getElementById('errorMessage').style.display = 'none';
         document.getElementById('emailErrorMessage').style.display = 'none';
 
-        // Проверяем, совпадают ли пароли
-        if (password !== repassword) {
-            document.getElementById('errorMessage').style.display = 'block'; // Показываем сообщение об ошибке
-            document.getElementById('registrationForm').reset();
-            return; // Прекращаем выполнение функции
-        }
+        
 
         // Создаем объект с данными для отправки на сервер
         var data = {
+            fio: name,
+            phone: phone,
             email: email,
-            password: password
+            password: password,
+            role: "user"
         };
 
-        fetch('http://localhost:8080/log/create', {
+        fetch('http://localhost:8080/log/users/creat', {
             method: "post",
             headers: {
                 'Content-Type': 'application/json'
@@ -167,6 +167,32 @@
     var form = document.getElementById('registrationForm');
     // Назначаем обработчик события отправки формы
     form.addEventListener('submit', submitForm);
+</script>
+<script>
+    function checkAuth(event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+
+        fetch('http://localhost:8080/log/users/isauth', {
+            method: 'POST'
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (response.status === 204) {
+                // Пользователь не авторизован
+                window.location.href = '/login.html';
+            } else if (response.status === 200) {
+                // Пользователь авторизован
+                window.location.href = '/accaunt.html';
+            } else {
+                // Другие ошибки
+                throw new Error('Неизвестный ответ сервера');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при запросе.');
+        });
+    }
 </script>
 </body>
 </html>

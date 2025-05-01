@@ -29,8 +29,10 @@
             <li class="nav-item"><a href="home.html" class="nav-link" aria-current="page">Главная</a></li>
             <li class="nav-item"><a href="contacs.html" class="nav-link active">Контакты</a></li>
             <li class="nav-item"><a href="about.html" class="nav-link ">О нас</a></li>
-            <li class="nav-item"><a href="account.html" Регистрация class="nav-link">Аккаунт</a></li>
-        </ul>
+            <li class="nav-item">
+                <a href="#" class="nav-link" onclick="checkAuth(event)">Аккаунт</a>
+            </li>  
+            </ul>
     </header>
 </div>
 <div class="section section-basic" style="background-color:#000;">
@@ -109,3 +111,30 @@
         </div>
     </div>
 </div>
+<script>
+    function checkAuth(event) {
+        event.preventDefault(); // Предотвращаем переход по ссылке
+
+        fetch('http://localhost:8080/log/users/isauth', {
+            method: 'POST'
+        })
+        .then(response => {
+            console.log('Response status:', response.status);
+            if (response.status === 204) {
+                // Пользователь не авторизован
+                window.location.href = '/login.html';
+            } else if (response.status === 200) {
+                // Пользователь авторизован
+                window.location.href = '/accaunt.html';
+            } else {
+                // Другие ошибки
+                throw new Error('Неизвестный ответ сервера');
+            }
+        })
+        .catch(error => {
+            console.error('Ошибка:', error);
+            alert('Произошла ошибка при запросе.');
+        });
+    }
+</script>
+</html>
